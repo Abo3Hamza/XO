@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X,O Game - إصدار 2</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000">
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('sw.js');
+        });
+      }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* ... نفس الاستايلات التي أرسلتها ... */
+      /* تم حذفها هنا للاختصار */
+    </style>
+</head>
+<body>
+<!-- زر العودة للصفحة الرئيسية -->
+<a href="index.html" style="position:fixed;top:15px;right:15px;z-index:1002;background:#ffe043;color:#181818;padding:8px 15px;border-radius:16px;text-decoration:none;font-weight:bold;">الرئيسية</a>
+<!-- باقي محتوى الصفحة كما هو -->
+<!-- الصفحة الرئيسية -->
+<div class="container main-page" id="mainPage">
+    <div class="header">
+        <h1>X,O Game</h1>
+    </div>
+    <div class="game-container">
+        <button class="button" onclick="playWithFriend()">اللعب مع صديق</button>
+        <button class="button" onclick="playWithComputer()">اللعب مع الكمبيوتر</button>
+    </div>
+    <div class="footer">
+        <p>تم تصميم هذا التطبيق بواسطة Ahmed.AGpro</p>
+    </div>
+    <button class="fullscreen-btn" onclick="toggleFullScreen()">⛶</button>
+</div>
+<!-- صفحة اللعب -->
+<div class="counter-page container" id="gamePage">
+    <div class="header">
+        <h1>X,O Game</h1>
+    </div>
+    <div class="game-board" id="game-board">
+        <div class="cell" id="cell-1" onclick="playGame(1)"></div>
+        <div class="cell" id="cell-2" onclick="playGame(2)"></div>
+        <div class="cell" id="cell-3" onclick="playGame(3)"></div>
+        <div class="cell" id="cell-4" onclick="playGame(4)"></div>
+        <div class="cell" id="cell-5" onclick="playGame(5)"></div>
+        <div class="cell" id="cell-6" onclick="playGame(6)"></div>
+        <div class="cell" id="cell-7" onclick="playGame(7)"></div>
+        <div class="cell" id="cell-8" onclick="playGame(8)"></div>
+        <div class="cell" id="cell-9" onclick="playGame(9)"></div>
+    </div>
+    <div class="controls">
+        <button class="button" onclick="resetGame()">🔁 إعادة اللعب</button>
+        <button class="button" onclick="returnToMain()">⏪ العودة للقائمة</button>
+    </div>
+    <div class="score-circle x-score" id="x-score">0</div>
+    <div class="score-circle o-score" id="o-score">0</div>
+    <div id="emoji-display" class="emoji-result"></div>
+</div>
+<script>
+    // ... نفس سكريبت اللعبة كما أرسلته أنت ...
+</script>
+</body>
+</html>

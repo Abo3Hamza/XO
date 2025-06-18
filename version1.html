@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X,O Game - إصدار 1</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000">
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('sw.js');
+        });
+      }
+    </script>
+    <!-- باقي أكواد الرأس كما أرسلتها تماماً -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* ... نفس الاستايلات التي أرسلتها ... */
+      /* تم حذفها هنا للاختصار */
+    </style>
+</head>
+<body>
+<!-- أضف زر للعودة للصفحة الرئيسية -->
+<a href="index.html" style="position:fixed;top:15px;right:15px;z-index:1002;background:#ffe043;color:#181818;padding:8px 15px;border-radius:16px;text-decoration:none;font-weight:bold;">الرئيسية</a>
+<!-- باقي محتوى الصفحة كما هو -->
+<div class="container mx-auto p-4 pt-6 md:p-6 lg:p-12 xl:p-24">
+    <button class="fullscreen-btn" onclick="toggleFullScreen()">⛶</button>
+    <div class="header">
+        <h1 class="text-3xl font-bold mb-4">X,O Game</h1>
+    </div>
+    <div class="game-container">
+        <button class="button mode-button" onclick="playWithFriend()">اللعب مع صديق</button>
+        <button class="button mode-button" onclick="playWithComputer()">اللعب مع الكمبيوتر</button>
+        <div class="game-board" id="game-board" style="display: none;">
+            <div class="cell" id="cell-1" onclick="playGame(1)"></div>
+            <div class="cell" id="cell-2" onclick="playGame(2)"></div>
+            <div class="cell" id="cell-3" onclick="playGame(3)"></div>
+            <div class="cell" id="cell-4" onclick="playGame(4)"></div>
+            <div class="cell" id="cell-5" onclick="playGame(5)"></div>
+            <div class="cell" id="cell-6" onclick="playGame(6)"></div>
+            <div class="cell" id="cell-7" onclick="playGame(7)"></div>
+            <div class="cell" id="cell-8" onclick="playGame(8)"></div>
+            <div class="cell" id="cell-9" onclick="playGame(9)"></div>
+        </div>
+        <div class="controls">
+            <button class="button" onclick="resetGame()" style="display: none;" id="reset-button">🔁إعادة اللعب</button>
+            <button class="button" onclick="returnToMain()" style="display: none;" id="exit-button">⏩️القائمه</button>
+        </div>
+    </div>
+    <div class="footer">
+        <p class="text-lg mt-4">تم تصميم هذا التطبيق بواسطة Ahmed.AGpro</p>
+    </div>
+
+    <div class="score-circle x-score" id="x-score">0</div>
+    <div class="score-circle o-score" id="o-score">0</div>
+    <div id="emoji-display" class="emoji-result"></div>
+</div>
+<script>
+    // ... نفس سكريبت اللعبة كما أرسلته أنت ...
+</script>
+</body>
+</html>
