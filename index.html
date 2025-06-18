@@ -6,8 +6,8 @@
     <title>XO - الرئيسية</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000">
+    <link rel="stylesheet" href="tailwind.min.css">
     <script>
-      // تسجيل service worker لجعل التطبيق يعمل أوفلاين
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('sw.js');

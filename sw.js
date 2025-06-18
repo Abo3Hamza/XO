@@ -5,10 +5,10 @@ const urlsToCache = [
   "version1.html",
   "version2.html",
   "manifest.json",
+  "tailwind.min.css",
   "icons/xo128.png",
   "icons/xo192.png",
-  "icons/xo512.png",
-  "https://cdn.tailwindcss.com"
+  "icons/xo512.png"
 ];
 
 self.addEventListener("install", event => {

@@ -6,6 +6,7 @@
     <title>X,O Game - إصدار 1</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000">
+    <link rel="stylesheet" href="tailwind.min.css">
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -13,17 +14,162 @@
         });
       }
     </script>
-    <!-- باقي أكواد الرأس كما أرسلتها تماماً -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      /* ... نفس الاستايلات التي أرسلتها ... */
-      /* تم حذفها هنا للاختصار */
+        :root {
+            --background-color: #000000;
+            --text-color: #fff;
+            --button-color: #367543;
+            --button-hover-color: #708fdd;
+            --game-board-color: #367543;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #000000;
+                --text-color: #fff;
+                --button-color: #367543;
+                --button-hover-color: #708fdd;
+                --game-board-color: #1c1b1b;
+            }
+        }
+        @media (prefers-color-scheme: light) {
+            :root {
+                --background-color: #000000;
+                --text-color: #ffffff;
+                --button-color: #367543;
+                --button-hover-color: #708fdd;
+                --game-board-color: #000000;
+            }
+        }
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: Arial, sans-serif;
+            transition: background-color 0.3s ease;
+        }
+        .button {
+            background-color: var(--button-color);
+            color: var(--text-color);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: var(--button-hover-color);
+        }
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border: 1px solid #e6e11c;
+            border-radius: 10px;
+            background-color: var(--game-board-color);
+        }
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 10px;
+            margin-bottom: 20px;
+        }
+        .cell {
+            width: 50px;
+            height: 50px;
+            background-color: #252870;
+            border: 1px solid #e6e11c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .cell:hover {
+            background-color: #0f9a2a;
+        }
+        .mode-button {
+            margin: 10px;
+        }
+        .header {
+            background-color: #000000;
+            color: #ecf0f1;
+            padding: 10px;
+            text-align: center;
+        }
+        .footer {
+            background-color: #000000;
+            color: #ecf0f1;
+            padding: 10px;
+            text-align: center;
+            clear: both;
+        }
+        .fullscreen-btn {
+            position: fixed;
+            top: 15px;
+            z-index: 1001;
+            padding: 10px 15px;
+            border-radius: 50%;
+            font-size: 1.5em;
+            background-color: #95a5a6;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .x-turn {
+            background-color: #3498db;
+        }
+        .o-turn {
+            background-color: #ed5f23;
+        }
+        .computer-turn {
+            background-color: #dd581f !important;
+        }
+        .fullscreen-btn {
+            left: 15px;
+        }
+        .score-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            position: fixed;
+            bottom: 20px;
+            border: 3px solid #fff;
+        }
+        .x-score {
+            background-color: #3498db;
+            left: 20px;
+        }
+        .o-score {
+            background-color: #fb4d03;
+            right: 20px;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .emoji-result {
+            font-size: 60px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            animation: fadeInOut 2s ease-in-out;
+            z-index: 1000;
+        }
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
     </style>
 </head>
 <body>
-<!-- أضف زر للعودة للصفحة الرئيسية -->
 <a href="index.html" style="position:fixed;top:15px;right:15px;z-index:1002;background:#ffe043;color:#181818;padding:8px 15px;border-radius:16px;text-decoration:none;font-weight:bold;">الرئيسية</a>
-<!-- باقي محتوى الصفحة كما هو -->
 <div class="container mx-auto p-4 pt-6 md:p-6 lg:p-12 xl:p-24">
     <button class="fullscreen-btn" onclick="toggleFullScreen()">⛶</button>
     <div class="header">
@@ -57,7 +203,220 @@
     <div id="emoji-display" class="emoji-result"></div>
 </div>
 <script>
-    // ... نفس سكريبت اللعبة كما أرسلته أنت ...
+    let currentPlayer = "X";
+    let gameBoard = ["", "", "", "", "", "", "", "", ""];
+    let gameMode = "";
+    let computerPlayer = "O";
+    let xWins = 0;
+    let oWins = 0;
+    let gameActive = true;
+    let isComputerTurn = false;
+
+    function playWithFriend() {
+        gameMode = "friend";
+        showGameElements();
+        resetGame();
+        document.body.classList.add('x-turn');
+    }
+
+    function playWithComputer() {
+        gameMode = "computer";
+        showGameElements();
+        resetGame();
+        document.body.classList.add('x-turn');
+    }
+
+    function showGameElements() {
+        document.getElementById("game-board").style.display = "grid";
+        document.getElementById("reset-button").style.display = "block";
+        document.getElementById("exit-button").style.display = "block";
+        document.querySelectorAll(".mode-button").forEach(btn => btn.style.display = "none");
+    }
+
+    function playGame(cell) {
+        if (!gameActive || isComputerTurn) return;
+        if (gameBoard[cell - 1] === "") {
+            gameBoard[cell - 1] = currentPlayer;
+            document.getElementById(`cell-${cell}`).innerText = currentPlayer;
+
+            checkWinner();
+            if (!gameActive) return;
+
+            if (gameMode === "friend") {
+                currentPlayer = currentPlayer === "X" ? "O" : "X";
+                updateTurnUI();
+            } else if (gameMode === "computer") {
+                computerTurn();
+            }
+        }
+    }
+
+    function computerTurn() {
+        if (!gameActive) return;
+        isComputerTurn = true;
+        document.body.classList.add('computer-turn');
+
+        setTimeout(() => {
+            if (!gameActive) return;
+
+            let emptyCells = [];
+            for (let i = 0; i < gameBoard.length; i++) {
+                if (gameBoard[i] === "") emptyCells.push(i);
+            }
+
+            for (let i = 0; i < emptyCells.length; i++) {
+                let tempBoard = gameBoard.slice();
+                tempBoard[emptyCells[i]] = computerPlayer;
+                if (checkWin(tempBoard, computerPlayer)) {
+                    makeComputerMove(emptyCells[i]);
+                    return;
+                }
+            }
+
+            for (let i = 0; i < emptyCells.length; i++) {
+                let tempBoard = gameBoard.slice();
+                tempBoard[emptyCells[i]] = "X";
+                if (checkWin(tempBoard, "X")) {
+                    makeComputerMove(emptyCells[i]);
+                    return;
+                }
+            }
+
+            let randomIndex = Math.floor(Math.random() * emptyCells.length);
+            makeComputerMove(emptyCells[randomIndex]);
+        }, 500);
+    }
+
+    function makeComputerMove(cellIndex) {
+        gameBoard[cellIndex] = computerPlayer;
+        document.getElementById(`cell-${cellIndex + 1}`).innerText = computerPlayer;
+        checkWinner();
+        isComputerTurn = false;
+        document.body.classList.remove('computer-turn');
+    }
+
+    function showEmoji(emoji) {
+        const emojiDisplay = document.getElementById("emoji-display");
+        emojiDisplay.textContent = emoji;
+        emojiDisplay.style.opacity = 1;
+        setTimeout(() => {
+            emojiDisplay.style.opacity = 0;
+        }, 2000);
+    }
+
+    function checkWin(board, player) {
+        const winningCombinations = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+
+        for (let combination of winningCombinations) {
+            if (board[combination[0]] === player &&
+                board[combination[1]] === player &&
+                board[combination[2]] === player) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function checkWinner() {
+        if (!gameActive) return;
+
+        let winningCombination = null;
+        const winningCombinations = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+
+        for (let combination of winningCombinations) {
+            if (gameBoard[combination[0]] === gameBoard[combination[1]] &&
+                gameBoard[combination[1]] === gameBoard[combination[2]] &&
+                gameBoard[combination[0]] !== "") {
+                winningCombination = combination;
+                break;
+            }
+        }
+
+        if (winningCombination) {
+            gameActive = false;
+            highlightWinningCombination(winningCombination);
+            setTimeout(() => {
+                updateScores(gameBoard[winningCombination[0]]);
+                resetGame();
+            }, 1500);
+        } else if (!gameBoard.includes("")) {
+            gameActive = false;
+            setTimeout(() => resetGame(), 1500);
+        }
+    }
+
+    function highlightWinningCombination(combination) {
+        combination.forEach(index => {
+            const cell = document.getElementById(`cell-${index + 1}`);
+            cell.style.backgroundColor = '#2ecc71';
+            cell.style.transition = 'background-color 0.5s ease';
+        });
+    }
+
+    function updateScores(winner) {
+        const emoji = gameMode === "computer" ?
+            (winner === "X" ? "🥳" : "😈") :
+            (winner === "X" ? "💙❌️" : "🧡⭕");
+
+        showEmoji(emoji);
+
+        if (winner === "X") {
+            xWins++;
+            document.getElementById("x-score").textContent = xWins;
+        } else {
+            oWins++;
+            document.getElementById("o-score").textContent = oWins;
+        }
+    }
+
+    function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+    }
+
+    function resetGame() {
+        gameActive = true;
+        gameBoard = ["", "", "", "", "", "", "", "", ""];
+        currentPlayer = "X";
+        isComputerTurn = false;
+        document.body.classList.remove('x-turn', 'o-turn', 'computer-turn');
+        document.body.classList.add('x-turn');
+        for (let i = 1; i <= 9; i++) {
+            const cell = document.getElementById(`cell-${i}`);
+            cell.style.backgroundColor = '#252870';
+            cell.innerText = "";
+        }
+    }
+
+    function returnToMain() {
+        resetGame();
+        xWins = 0;
+        oWins = 0;
+        document.getElementById("x-score").textContent = "0";
+        document.getElementById("o-score").textContent = "0";
+        document.getElementById("game-board").style.display = "none";
+        document.getElementById("reset-button").style.display = "none";
+        document.getElementById("exit-button").style.display = "none";
+        document.querySelectorAll(".mode-button").forEach(btn => btn.style.display = "block");
+    }
+
+    function updateTurnUI() {
+        document.body.classList.remove('x-turn', 'o-turn');
+        document.body.classList.add(currentPlayer === 'X' ? 'x-turn' : 'o-turn');
+    }
 </script>
 </body>
 </html>
